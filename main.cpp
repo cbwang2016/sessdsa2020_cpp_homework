@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <queue>
+#include <stack>
 #include <algorithm>
 #include "json.hpp"
 #include "pystring/pystring.h"
@@ -9,8 +9,7 @@
 using json = nlohmann::json;
 using namespace std;
 
-tuple<vector<vector<int>>, map<string, int>>
-
+pair<vector<vector<int>>, map<string, int>>
 init() {
     ifstream f("Film.json");
     json data;
@@ -38,7 +37,7 @@ init() {
                     adjacency_list[actors_ids[actor_name]].push_back(actors_ids[actor2_name]);
     }
     cout << "actors count: " << actors_ids.size() << endl;
-    return {adjacency_list, actors_ids};
+    return make_pair(adjacency_list, actors_ids);
 }
 
 vector<vector<int>> getSubgraphs(const vector<vector<int>> &adjacency_list) {
@@ -49,18 +48,18 @@ vector<vector<int>> getSubgraphs(const vector<vector<int>> &adjacency_list) {
         if (visited[i])
             continue;
 
-        queue<int> q;
+        stack<int> s;
         vector<int> in_set{i};
-        q.push(i);
+        s.push(i);
         visited[i] = true;
 
-        while (!q.empty()) {
-            int front = q.front();
-            q.pop();
+        while (!s.empty()) {
+            int front = s.top();
+            s.pop();
             for (int j : adjacency_list[front]) {
                 if (!visited[j]) {
                     visited[j] = true;
-                    q.push(j);
+                    s.push(j);
                     in_set.push_back(j);
                 }
             }
@@ -126,7 +125,9 @@ int getDiameter(const vector<vector<int>> &adjacency_list, const vector<int> &ac
 }
 
 int main() {
-    auto[adjacency_list, actors_ids] = init();
+    auto tmp = init();
+    auto adjacency_list = tmp.first;
+    auto actors_ids = tmp.second;
 
     vector<vector<int>> subgraphs = getSubgraphs(adjacency_list);
 
