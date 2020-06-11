@@ -4,10 +4,28 @@
 #include <stack>
 #include <algorithm>
 #include "json.hpp"
-#include "pystring/pystring.h"
 
 using json = nlohmann::json;
 using namespace std;
+
+void split(const string &str, vector<string> &result, const string &sep) {
+    result.clear();
+
+    string::size_type i, j, len = str.size(), n = sep.size();
+
+    i = j = 0;
+
+    while (i + n <= len) {
+        if (str[i] == sep[0] && str.substr(i, n) == sep) {
+            result.push_back(str.substr(j, i - j));
+            i = j = i + n;
+        } else {
+            i++;
+        }
+    }
+
+    result.push_back(str.substr(j, len - j));
+}
 
 pair<vector<vector<int>>, map<string, int>>
 init() {
@@ -22,7 +40,7 @@ init() {
     int count = 0;
     for (auto film : data) {
         vector<string> actors;
-        pystring::split(film["actor"], actors, ",");
+        split(film["actor"], actors, ",");
         for (const string &actor_name : actors) {
             if (!actors_ids.count(actor_name)) {
                 actors_ids[actor_name] = count;
