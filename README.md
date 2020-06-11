@@ -13,3 +13,5 @@ cmake --build .
 cmake -DCMAKE_BUILD_TYPE=Release . -G "MinGW Makefiles"
 cmake --build .
 ```
+## Run
+Put the `Film.json` file in the same directory with the executable file. Then run the executable file.

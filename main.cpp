@@ -8,6 +8,7 @@
 using json = nlohmann::json;
 using namespace std;
 
+// copied from https://github.com/imageworks/pystring
 void split(const string &str, vector<string> &result, const string &sep) {
     result.clear();
 
