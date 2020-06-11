@@ -115,10 +115,6 @@ int getMaxDistance(const vector<vector<int>> &adj, int index0, vector<bool> &vis
 }
 
 int getDiameter(const vector<vector<int>> &adjacency_list, const vector<int> &actors_set) {
-//    if (actors_set.size() > 1000)
-//        return -1;
-    if (actors_set.size() < 40)
-        return -1;
     int count = 0;
     map<int, int> id_map;
     for (auto old_id : actors_set) {
