@@ -3,6 +3,7 @@
 #include <vector>
 #include <stack>
 #include <algorithm>
+#include <chrono>
 #include "json.hpp"
 
 using json = nlohmann::json;
@@ -156,13 +157,18 @@ int main() {
 
     cout << "subgraphs count: " << subgraphs.size() << endl;
 
+    auto start = chrono::steady_clock::now();
     vector<int> diameters;
     diameters.reserve(subgraphs.size());
     for (const auto &subgraph : subgraphs)
         diameters.push_back(getDiameter(adjacency_list, subgraph));
+    auto end = chrono::steady_clock::now();
+    cout << "Elapsed time: "
+         << chrono::duration_cast<chrono::seconds>(end - start).count()
+         << " sec" << endl;
 
+    cout << "diameters of the largest 10 subgraphs: ";
     copy(diameters.end() - 10, diameters.end(), ostream_iterator<int>(cout, " "));
-    // print the diameters of the largest 10 subgraphs
 
     return 0;
 }
